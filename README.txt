@@ -33,3 +33,11 @@ V5 — ORDEM DA TELA
 5. Configurações
 
 O relatório agora é o primeiro conteúdo exibido ao abrir o app.
+
+
+V6 — CARDS MAIS COMPACTOS
+- Botão Editar substituído por ícone de lápis azul.
+- Botão Excluir substituído por ícone de lixeira vermelha.
+- Ícones ficam fixos no canto direito de cada card.
+- Os botões não ocupam mais uma segunda linha no celular.
+- Altura vertical dos cards foi reduzida.
