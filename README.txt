@@ -1,19 +1,35 @@
-PWA — RELATÓRIO SALA DE ESTUDO
+AULAS SALA DE ESTUDO — PWA V4
 
-O app salva automaticamente aulas, pagamentos, PIX, valor da hora-aula e mês no próprio aparelho.
+Mudança principal:
+- Aulas e pagamentos não mostram mais os formulários permanentemente.
+- Botão "+ Nova aula" abre um modal.
+- Botão "+ Novo pagamento" abre um modal.
+- Ao salvar, cada registro vira um card compacto.
+- Cada card possui somente Editar e Excluir.
+- Editar reabre o mesmo modal já preenchido.
+- No celular, o modal abre como uma folha na parte inferior da tela.
+- Dados continuam salvos automaticamente no localStorage.
+- Mantidos os ícones, manifest, backup e funcionamento offline.
 
-IMPORTANTE:
-Para instalar como PWA e funcionar offline, publique esta pasta em um endereço HTTPS.
-Pode ser GitHub Pages, Vercel, Netlify ou domínio próprio.
+IMPORTANTE AO PUBLICAR:
+Substitua pelo menos:
+- index.html
+- sw.js
 
-No Android/Chrome:
-1. Abra o endereço publicado.
-2. Toque no menu ⋮.
-3. Escolha “Adicionar à tela inicial” ou “Instalar app”.
+É recomendável substituir o pacote inteiro para evitar arquivos antigos em cache.
 
-O app possui também:
-- Exportar backup em JSON.
-- Importar backup em JSON.
-- Funcionamento offline após a primeira abertura.
+Se o celular continuar exibindo a versão anterior:
+1. Abra o site com internet.
+2. Atualize a página.
+3. Feche e abra novamente.
+4. Se necessário, limpe os dados do site no Chrome uma vez.
 
-Abrir index.html diretamente pelo gerenciador de arquivos não registra o Service Worker.
+
+V5 — ORDEM DA TELA
+1. Relatório
+2. Resumo
+3. Aulas registradas
+4. Pagamentos
+5. Configurações
+
+O relatório agora é o primeiro conteúdo exibido ao abrir o app.

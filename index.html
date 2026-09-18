@@ -4,162 +4,1208 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#004EB5">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Relatório Sala de Estudo</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+<title>Aulas Sala de Estudo</title>
+
 <style>
-:root{--azul:#004EB5;--amarelo:#FFD100;--bg:#f5f7fb;--card:#fff;--txt:#172033;--muted:#667085;--border:#d9e1ec;--red:#b42318;--green:#08783e}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--txt)}
-header{background:var(--azul);color:#fff;padding:26px 16px;border-bottom:6px solid var(--amarelo)}header>div,main{max-width:1000px;margin:auto}
-h1{margin:0 0 5px;font-size:30px}header p{margin:0;opacity:.9}.saved{margin-top:10px;font-size:12px;font-weight:700}
-main{padding:16px;display:grid;gap:16px}.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 6px 20px #0000000d}
-h2{font-size:19px;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-label{font-size:13px;font-weight:700;display:flex;flex-direction:column;gap:6px}
-input,select,textarea{width:100%;padding:11px;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit}
-.row{border:1px solid var(--border);border-radius:12px;padding:12px;margin-top:10px;background:#fbfcfe}
-.rowgrid{display:grid;grid-template-columns:1.2fr 1fr 1fr 1.5fr auto;gap:9px;align-items:end}.paygrid{grid-template-columns:1.2fr 1fr 1.2fr auto}
-.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
-button{border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:800;cursor:pointer}
-.primary{background:var(--azul);color:#fff}.secondary{background:var(--amarelo);color:#222}.ghost{background:#edf3fb;color:#00377f}.danger{background:#fff0f0;color:var(--red)}
-.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.metric{padding:13px;border:1px solid var(--border);border-radius:12px;background:#f8fafc}
-.metric span{display:block;font-size:12px;color:var(--muted);font-weight:700}.metric strong{font-size:19px}
-textarea{min-height:430px;resize:vertical;font-family:ui-monospace,Consolas,monospace;line-height:1.45}.note{color:var(--muted);font-size:13px}.ok{color:var(--green);font-weight:800}
-@media(max-width:760px){.grid,.summary{grid-template-columns:1fr 1fr}.rowgrid,.paygrid{grid-template-columns:1fr 1fr}.rowgrid button,.paygrid button{grid-column:span 2}}
-@media(max-width:480px){.grid,.summary,.rowgrid,.paygrid{grid-template-columns:1fr}.rowgrid button,.paygrid button{grid-column:auto}main{padding:10px}.card{padding:14px}}
+:root{
+  --azul:#004EB5;
+  --azul2:#00377f;
+  --amarelo:#FFD100;
+  --bg:#f5f7fb;
+  --card:#fff;
+  --txt:#172033;
+  --muted:#667085;
+  --border:#d9e1ec;
+  --red:#b42318;
+  --green:#08783e;
+  --shadow:0 8px 26px rgba(16,24,40,.08);
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--txt);
+}
+body.modal-open{overflow:hidden}
+
+header{
+  background:linear-gradient(135deg,var(--azul),var(--azul2));
+  color:#fff;
+  padding:calc(24px + env(safe-area-inset-top)) 16px 24px;
+  border-bottom:6px solid var(--amarelo);
+}
+header>div,main{max-width:1000px;margin:auto}
+h1{margin:0 0 5px;font-size:30px}
+header p{margin:0;opacity:.9}
+.saved{margin-top:10px;font-size:12px;font-weight:700}
+
+main{
+  padding:16px;
+  padding-bottom:calc(42px + env(safe-area-inset-bottom));
+  display:grid;
+  gap:16px;
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+h2{font-size:19px;margin:0}
+h3{font-size:15px;margin:18px 0 8px}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+label{
+  font-size:13px;
+  font-weight:700;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+input,select,textarea{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fff;
+  font:inherit;
+  color:var(--txt);
+}
+input:focus,select:focus,textarea:focus{
+  outline:none;
+  border-color:var(--azul);
+  box-shadow:0 0 0 3px rgba(0,78,181,.10);
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 13px;
+  font:inherit;
+  font-weight:800;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+.primary{background:var(--azul);color:#fff}
+.secondary{background:var(--amarelo);color:#222}
+.ghost{background:#edf3fb;color:#00377f}
+.danger{background:#fff0f0;color:var(--red)}
+.small{padding:7px 10px;font-size:12px}
+
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:12px;
+}
+
+/* Compact registered records */
+.compact-list{
+  display:grid;
+  gap:8px;
+}
+.record-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:58px;
+  padding:10px 11px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#fbfcfe;
+}
+.record-info{
+  flex:1;
+  min-width:0;
+}
+.record-title{
+  font-size:14px;
+  font-weight:850;
+  line-height:1.25;
+}
+.record-sub{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.25;
+}
+.record-actions{
+  display:flex;
+  gap:6px;
+  flex-shrink:0;
+}
+.empty{
+  padding:7px 1px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* Student registration */
+.student-add{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  align-items:end;
+  max-width:540px;
+}
+.student-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
+}
+.student-chip{
+  padding:7px 10px;
+  border-radius:999px;
+  background:#eef4fb;
+  color:#00377f;
+  font-size:13px;
+  font-weight:700;
+  border:1px solid #d5e3f4;
+}
+
+/* Summary */
+.summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
+.metric{
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:#f8fafc;
+}
+.metric span{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  font-weight:700;
+  margin-bottom:3px;
+}
+.metric strong{font-size:19px}
+
+textarea{
+  min-height:340px;
+  resize:vertical;
+  font-family:ui-monospace,Consolas,monospace;
+  line-height:1.45;
+}
+.note{color:var(--muted);font-size:13px}
+.ok{color:var(--green);font-weight:800}
+
+/* Modal */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(5,15,30,.58);
+  backdrop-filter:blur(3px);
+}
+.modal-backdrop.open{display:flex}
+.modal{
+  width:min(560px,100%);
+  max-height:calc(100dvh - 36px);
+  overflow:auto;
+  background:#fff;
+  border-radius:18px;
+  box-shadow:0 28px 80px rgba(0,0,0,.30);
+}
+.modal-head{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 16px 12px;
+  background:#fff;
+  border-bottom:1px solid #eef1f5;
+}
+.modal-head h2{
+  font-size:18px;
+}
+.modal-close{
+  width:36px;
+  height:36px;
+  padding:0;
+  border-radius:999px;
+  background:#eef2f7;
+  color:#344054;
+  font-size:20px;
+  line-height:1;
+}
+.modal-body{
+  padding:16px;
+}
+.modal-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.modal-grid .full{grid-column:1/-1}
+.modal-footer{
+  position:sticky;
+  bottom:0;
+  display:flex;
+  gap:9px;
+  justify-content:flex-end;
+  padding:12px 16px 16px;
+  background:#fff;
+  border-top:1px solid #eef1f5;
+}
+.modal-footer button{
+  min-width:110px;
+}
+
+@media(max-width:760px){
+  .grid,.summary{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .grid,.summary{grid-template-columns:1fr}
+  .student-add{grid-template-columns:1fr}
+  main{padding:10px}
+  .card{padding:14px}
+  .section-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .section-head button{
+    width:100%;
+  }
+  .record-card{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .record-actions{
+    width:100%;
+  }
+  .record-actions button{
+    flex:1;
+  }
+  .modal-backdrop{
+    padding:0;
+    align-items:flex-end;
+  }
+  .modal{
+    width:100%;
+    max-height:92dvh;
+    border-radius:20px 20px 0 0;
+  }
+  .modal-grid{
+    grid-template-columns:1fr;
+  }
+  .modal-grid .full{grid-column:auto}
+  .modal-footer button{
+    flex:1;
+    min-width:0;
+  }
+}
 </style>
 </head>
 <body>
-<header><div><h1>Relatório de Aulas</h1><p>Sala de Estudo</p><div class="saved">● salvamento automático neste aparelho</div></div></header>
+
+<header>
+  <div>
+    <h1>Aulas Sala de Estudo</h1>
+    <p>Relatórios de aulas e pagamentos</p>
+    <div class="saved">● salvamento automático neste aparelho</div>
+  </div>
+</header>
+
 <main>
+
 <section class="card">
-<h2>1. Configurações</h2>
-<div class="grid">
-<label>Mês<input id="mes" type="month"></label>
-<label>Valor da hora-aula<input id="valorHora" type="number" step="0.01" value="27"></label>
-<label>PIX<input id="pix" value="064.233.904-01"></label>
-<label>Título<input id="titulo" value="Aulas dadas Sala de Estudo"></label>
-</div>
+  <h2 style="margin-bottom:14px">1. Relatório</h2>
+
+  <textarea id="saida" readonly></textarea>
+
+  <div class="buttons">
+    <button class="primary" id="btnCopiar" type="button">Copiar para WhatsApp</button>
+    <button class="ghost" id="btnExportar" type="button">Exportar backup</button>
+    <button class="ghost" id="btnImportar" type="button">Importar backup</button>
+    <button class="danger" id="btnLimpar" type="button">Limpar tudo</button>
+    <input id="arquivo" type="file" accept=".json,application/json" hidden>
+  </div>
+
+  <p id="status" class="note"></p>
 </section>
 
 <section class="card">
-<h2>2. Aulas</h2>
-<div id="aulas"></div>
-<div class="buttons"><button class="secondary" onclick="addAula()">+ Adicionar aula</button></div>
-<p class="note">O dia da semana e a duração são calculados automaticamente.</p>
+  <h2 style="margin-bottom:14px">2. Resumo</h2>
+
+  <div class="summary">
+    <div class="metric"><span>Horas</span><strong id="sHoras">0h</strong></div>
+    <div class="metric"><span>A receber</span><strong id="sReceber">R$ 0,00</strong></div>
+    <div class="metric"><span>Pago</span><strong id="sPago">R$ 0,00</strong></div>
+    <div class="metric"><span>Balanço</span><strong id="sBalanco">R$ 0,00</strong></div>
+  </div>
 </section>
 
 <section class="card">
-<h2>3. Pagamentos</h2>
-<div id="pagamentos"></div>
-<div class="buttons"><button class="secondary" onclick="addPagamento()">+ Adicionar pagamento</button></div>
+  <div class="section-head">
+    <h2>3. Aulas registradas</h2>
+    <button class="secondary" id="btnNovaAula" type="button">+ Nova aula</button>
+  </div>
+
+  <div id="listaAulas" class="compact-list"></div>
 </section>
 
 <section class="card">
-<h2>4. Resumo</h2>
-<div class="summary">
-<div class="metric"><span>Horas</span><strong id="sHoras">0h</strong></div>
-<div class="metric"><span>A receber</span><strong id="sReceber">R$ 0,00</strong></div>
-<div class="metric"><span>Pago</span><strong id="sPago">R$ 0,00</strong></div>
-<div class="metric"><span>Balanço</span><strong id="sBalanco">R$ 0,00</strong></div>
-</div>
+  <div class="section-head">
+    <h2>4. Pagamentos</h2>
+    <button class="secondary" id="btnNovoPagamento" type="button">+ Novo pagamento</button>
+  </div>
+
+  <div id="listaPagamentos" class="compact-list"></div>
 </section>
 
 <section class="card">
-<h2>5. Relatório</h2>
-<textarea id="saida" readonly></textarea>
-<div class="buttons">
-<button class="primary" onclick="copiar()">Copiar para WhatsApp</button>
-<button class="ghost" onclick="exportarBackup()">Exportar backup</button>
-<button class="ghost" onclick="document.getElementById('arquivo').click()">Importar backup</button>
-<button class="danger" onclick="limpar()">Limpar tudo</button>
-<input id="arquivo" type="file" accept=".json,application/json" hidden>
-</div>
-<p id="status" class="note"></p>
+  <h2 style="margin-bottom:14px">5. Configurações</h2>
+
+  <div class="grid">
+    <label>Mês
+      <input id="mes" type="month">
+    </label>
+
+    <label>Valor da hora-aula
+      <input id="valorHora" type="number" min="0" step="0.01" value="27">
+    </label>
+
+    <label>PIX
+      <input id="pix" value="064.233.904-01">
+    </label>
+
+    <label>Título do relatório
+      <input id="titulo" value="Aulas Sala de Estudo">
+    </label>
+  </div>
+
+  <h3>Alunos</h3>
+
+  <div class="student-add">
+    <label>Novo aluno
+      <input id="novoAluno" type="text" placeholder="Digite o nome">
+    </label>
+    <button class="secondary" id="btnAddAluno" type="button">+ Adicionar</button>
+  </div>
+
+  <div id="listaAlunos" class="student-list"></div>
 </section>
+
 </main>
 
+<!-- Modal Aula -->
+<div id="modalAula" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalAulaTitulo">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="modalAulaTitulo">Nova aula</h2>
+      <button class="modal-close" type="button" data-close="aula" aria-label="Fechar">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-grid">
+        <label class="full">Aluno
+          <select id="aAluno"></select>
+        </label>
+
+        <label class="full">Data
+          <input id="aData" type="date">
+        </label>
+
+        <label>Início
+          <input id="aInicio" type="time">
+        </label>
+
+        <label>Fim
+          <input id="aFim" type="time">
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="ghost" type="button" data-close="aula">Cancelar</button>
+      <button class="primary" id="salvarAula" type="button">Salvar aula</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Pagamento -->
+<div id="modalPagamento" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalPagamentoTitulo">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="modalPagamentoTitulo">Novo pagamento</h2>
+      <button class="modal-close" type="button" data-close="pagamento" aria-label="Fechar">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-grid">
+        <label class="full">Data
+          <input id="pData" type="date">
+        </label>
+
+        <label>Horário
+          <input id="pHora" type="time">
+        </label>
+
+        <label>Valor recebido
+          <input id="pValor" type="number" min="0" step="0.01" placeholder="0,00">
+        </label>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="ghost" type="button" data-close="pagamento">Cancelar</button>
+      <button class="primary" id="salvarPagamento" type="button">Salvar pagamento</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const KEY="sala_estudo_relatorio_v1";
-const alunos=["Vitor Sereno","Outro aluno"];
-const meses=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-const dias=["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const moeda=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-function dt(v){if(!v)return null;const [y,m,d]=v.split("-").map(Number);return new Date(y,m-1,d)}
-function dataCurta(v){const d=dt(v);return d?String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0"):""}
-function semana(v){const d=dt(v);return d?dias[d.getDay()]:""}
-function mins(a,b){if(!a||!b)return 0;let [h1,m1]=a.split(":").map(Number),[h2,m2]=b.split(":").map(Number);let x=h1*60+m1,y=h2*60+m2;if(y<x)y+=1440;return y-x}
-function horas(m,pad=false){let h=Math.floor(m/60),mm=m%60;return mm?`${pad?String(h).padStart(2,"0"):h}h${String(mm).padStart(2,"0")}`:`${pad?String(h).padStart(2,"0"):h}h`}
-function opts(){return alunos.map(a=>`<option>${a}</option>`).join("")}
+const KEY="sala_estudo_relatorio_v2";
+const LEGACY_KEY="sala_estudo_relatorio_v1";
 
-function bindRow(row){
-  row.querySelectorAll("input,select").forEach(e=>{
-    e.addEventListener("input",()=>{gerar();salvar()});
-    e.addEventListener("change",()=>{gerar();salvar()});
+let state={
+  alunos:["Vitor Sereno"],
+  aulas:[],
+  pagamentos:[],
+  config:{
+    mes:"",
+    valorHora:"27",
+    pix:"064.233.904-01",
+    titulo:"Aulas Sala de Estudo"
+  }
+};
+
+let aulaEditandoId=null;
+let pagamentoEditandoId=null;
+
+const meses=[
+  "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+  "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
+];
+
+const dias=[
+  "domingo","segunda-feira","terça-feira","quarta-feira",
+  "quinta-feira","sexta-feira","sábado"
+];
+
+const $=s=>document.querySelector(s);
+
+function moeda(v){
+  return Number(v||0).toLocaleString("pt-BR",{
+    style:"currency",
+    currency:"BRL"
   });
-  row.querySelector("button.danger").onclick=()=>{row.remove();gerar();salvar()};
 }
 
-function addAula(d={},save=true){
-  const row=document.createElement("div"); row.className="row aula";
-  row.innerHTML=`<div class="rowgrid">
-  <label>Data<input class="data" type="date" value="${d.data||""}"></label>
-  <label>Início<input class="inicio" type="time" value="${d.inicio||""}"></label>
-  <label>Fim<input class="fim" type="time" value="${d.fim||""}"></label>
-  <label>Aluno<select class="aluno">${opts()}</select></label>
-  <button class="danger">Remover</button></div>`;
-  $("#aulas").appendChild(row);
-  if(d.aluno){const s=row.querySelector(".aluno");if(![...s.options].some(o=>o.value===d.aluno))s.add(new Option(d.aluno,d.aluno));s.value=d.aluno}
-  bindRow(row); gerar(); if(save)salvar();
+function parseData(v){
+  if(!v)return null;
+  const [y,m,d]=v.split("-").map(Number);
+  return new Date(y,m-1,d);
 }
-function addPagamento(d={},save=true){
-  const row=document.createElement("div"); row.className="row pagamento";
-  row.innerHTML=`<div class="rowgrid paygrid">
-  <label>Data<input class="data" type="date" value="${d.data||""}"></label>
-  <label>Horário<input class="hora" type="time" value="${d.hora||""}"></label>
-  <label>Valor recebido<input class="valor" type="number" step="0.01" value="${d.valor??""}"></label>
-  <button class="danger">Remover</button></div>`;
-  $("#pagamentos").appendChild(row); bindRow(row); gerar(); if(save)salvar();
+
+function dataCurta(v){
+  const d=parseData(v);
+  if(!d)return "";
+  return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0");
 }
-function estado(){
- return {config:{mes:$("#mes").value,valorHora:$("#valorHora").value,pix:$("#pix").value,titulo:$("#titulo").value},
- aulas:$$(".aula").map(r=>({data:r.querySelector(".data").value,inicio:r.querySelector(".inicio").value,fim:r.querySelector(".fim").value,aluno:r.querySelector(".aluno").value})),
- pagamentos:$$(".pagamento").map(r=>({data:r.querySelector(".data").value,hora:r.querySelector(".hora").value,valor:r.querySelector(".valor").value}))};
+
+function semana(v){
+  const d=parseData(v);
+  return d?dias[d.getDay()]:"";
 }
-function salvar(){localStorage.setItem(KEY,JSON.stringify(estado()));$("#status").textContent="Alterações salvas automaticamente.";$("#status").className="note ok"}
+
+function minutosEntre(inicio,fim){
+  if(!inicio||!fim)return 0;
+
+  let [hi,mi]=inicio.split(":").map(Number);
+  let [hf,mf]=fim.split(":").map(Number);
+
+  let a=hi*60+mi;
+  let b=hf*60+mf;
+
+  if(b<a)b+=1440;
+
+  return b-a;
+}
+
+function horasTexto(minutos,pad=false){
+  const h=Math.floor(minutos/60);
+  const m=minutos%60;
+
+  if(m){
+    return `${pad?String(h).padStart(2,"0"):h}h${String(m).padStart(2,"0")}`;
+  }
+
+  return `${pad?String(h).padStart(2,"0"):h}h`;
+}
+
+function escapeHtml(s=""){
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[c]));
+}
+
+function novoId(){
+  return Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+}
+
+function salvarEstado(){
+  state.config={
+    mes:$("#mes").value,
+    valorHora:$("#valorHora").value,
+    pix:$("#pix").value,
+    titulo:$("#titulo").value || "Aulas Sala de Estudo"
+  };
+
+  localStorage.setItem(KEY,JSON.stringify(state));
+
+  $("#status").textContent="Alterações salvas automaticamente.";
+  $("#status").className="note ok";
+}
+
+function migrarLegado(){
+  const raw=localStorage.getItem(LEGACY_KEY);
+  if(!raw)return false;
+
+  try{
+    const old=JSON.parse(raw);
+    const nomes=new Set(["Vitor Sereno"]);
+
+    (old.aulas||[]).forEach(a=>{
+      if(a.aluno && a.aluno!=="Outro aluno")nomes.add(a.aluno);
+    });
+
+    state={
+      alunos:[...nomes],
+      aulas:(old.aulas||[])
+        .filter(a=>a.data||a.inicio||a.fim)
+        .map(a=>({
+          id:novoId(),
+          data:a.data||"",
+          inicio:a.inicio||"",
+          fim:a.fim||"",
+          aluno:a.aluno==="Outro aluno"?"Vitor Sereno":(a.aluno||"Vitor Sereno")
+        })),
+      pagamentos:(old.pagamentos||[])
+        .filter(p=>p.data||p.hora||p.valor)
+        .map(p=>({
+          id:novoId(),
+          data:p.data||"",
+          hora:p.hora||"",
+          valor:p.valor||""
+        })),
+      config:{
+        mes:old.config?.mes||"",
+        valorHora:old.config?.valorHora??"27",
+        pix:old.config?.pix??"064.233.904-01",
+        titulo:"Aulas Sala de Estudo"
+      }
+    };
+
+    localStorage.setItem(KEY,JSON.stringify(state));
+    return true;
+  }catch{
+    return false;
+  }
+}
+
 function restaurar(){
- const raw=localStorage.getItem(KEY);
- if(!raw){const n=new Date();$("#mes").value=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}`;addAula({aluno:"Vitor Sereno"},false);gerar();salvar();return}
- try{
-  const x=JSON.parse(raw),c=x.config||{};$("#mes").value=c.mes||"";$("#valorHora").value=c.valorHora??27;$("#pix").value=c.pix??"064.233.904-01";$("#titulo").value=c.titulo||"Aulas dadas Sala de Estudo";
-  $("#aulas").innerHTML="";$("#pagamentos").innerHTML="";
-  (x.aulas||[]).forEach(a=>addAula(a,false));(x.pagamentos||[]).forEach(p=>addPagamento(p,false));
-  if(!(x.aulas||[]).length)addAula({aluno:"Vitor Sereno"},false);gerar();
- }catch(e){console.error(e)}
+  let raw=localStorage.getItem(KEY);
+
+  if(!raw){
+    if(!migrarLegado()){
+      const hoje=new Date();
+      state.config.mes=
+        `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,"0")}`;
+    }
+    raw=localStorage.getItem(KEY);
+  }
+
+  if(raw){
+    try{
+      const x=JSON.parse(raw);
+
+      state.alunos=Array.isArray(x.alunos)&&x.alunos.length
+        ? x.alunos.filter(a=>a!=="Outro aluno")
+        : ["Vitor Sereno"];
+
+      if(!state.alunos.includes("Vitor Sereno")){
+        state.alunos.unshift("Vitor Sereno");
+      }
+
+      state.aulas=Array.isArray(x.aulas)
+        ? x.aulas.map(a=>({
+            id:a.id||novoId(),
+            data:a.data||"",
+            inicio:a.inicio||"",
+            fim:a.fim||"",
+            aluno:a.aluno==="Outro aluno"?"Vitor Sereno":(a.aluno||"Vitor Sereno")
+          }))
+        : [];
+
+      state.pagamentos=Array.isArray(x.pagamentos)
+        ? x.pagamentos.map(p=>({
+            id:p.id||novoId(),
+            data:p.data||"",
+            hora:p.hora||"",
+            valor:p.valor||""
+          }))
+        : [];
+
+      state.config={
+        mes:x.config?.mes||"",
+        valorHora:x.config?.valorHora??"27",
+        pix:x.config?.pix??"064.233.904-01",
+        titulo:"Aulas Sala de Estudo"
+      };
+    }catch{}
+  }
+
+  $("#mes").value=state.config.mes;
+  $("#valorHora").value=state.config.valorHora;
+  $("#pix").value=state.config.pix;
+  $("#titulo").value="Aulas Sala de Estudo";
+
+  ordenarAulas();
+  ordenarPagamentos();
+  renderTudo();
+  salvarEstado();
 }
-function gerar(){
- let totalM=0,n=1,la=[];
- $$(".aula").forEach(r=>{let d=r.querySelector(".data").value,a=r.querySelector(".inicio").value,b=r.querySelector(".fim").value,al=r.querySelector(".aluno").value;if(!d||!a||!b)return;let m=mins(a,b);totalM+=m;la.push(`${String(n++).padStart(2,"0")}• ${dataCurta(d)} _(${semana(d)})_\ndas ${a} às ${b}\n_(${horas(m)})_\n_${al}_`)});
- let pago=0,np=1,lp=[];
- $$(".pagamento").forEach(r=>{let d=r.querySelector(".data").value,h=r.querySelector(".hora").value,v=Number(r.querySelector(".valor").value||0);if(!d||!v)return;pago+=v;let ht=h?` | ${h.replace(":00","h").replace(":","h")}`:"";lp.push(`$${String(np++).padStart(2,"0")}• ${dataCurta(d)}${ht} | *${moeda(v).replace(/\s/g,"")}*`)});
- const vh=Number($("#valorHora").value||0),receber=(totalM/60)*vh,bal=pago-receber;
- $("#sHoras").textContent=horas(totalM,true);$("#sReceber").textContent=moeda(receber);$("#sPago").textContent=moeda(pago);$("#sBalanco").textContent=moeda(bal);
- const mv=$("#mes").value,mt=mv?meses[Number(mv.split("-")[1])-1]:"";
- let t=`*${$("#titulo").value.trim()||"Aulas dadas Sala de Estudo"}*${mt?`\n_${mt}_`:""}\n\n`;
- t+=la.length?la.join("\n\n"):"_Nenhuma aula cadastrada_";
- t+=`\n\n*_____________________*\n*PAGAMENTOS*\n`;
- t+=lp.length?lp.join("\n"):"_Nenhum pagamento registrado_";
- t+=`\n*_____________________*\n*# TOTAL*\n* de hora-aula: *${horas(totalM,true)}*\n* a receber: *${moeda(receber)}*\n* pago: *${moeda(pago)}*\n\n*# BALANÇO/CRÉDITO*\n_(pago - receber)_: *${bal<0?"- ":""}${moeda(Math.abs(bal))}*\n*_____________________*\nValor: ${moeda(vh).replace(",00","")} hora-aula`;
- if($("#pix").value.trim())t+=`\n*PIX:* ${$("#pix").value.trim()}`;
- $("#saida").value=t;
+
+function renderTudo(){
+  renderAlunos();
+  renderAulas();
+  renderPagamentos();
+  atualizarRelatorio();
 }
-async function copiar(){gerar();try{await navigator.clipboard.writeText($("#saida").value);$("#status").textContent="Relatório copiado.";$("#status").className="note ok"}catch{$("#saida").select();document.execCommand("copy")}}
-function exportarBackup(){const blob=new Blob([JSON.stringify(estado(),null,2)],{type:"application/json"}),u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=`sala-estudo-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(u)}
-$("#arquivo").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{localStorage.setItem(KEY,JSON.stringify(JSON.parse(r.result)));location.reload()}catch{alert("Backup inválido.")}};r.readAsText(f)});
-function limpar(){if(confirm("Apagar todos os dados salvos neste aparelho?")){localStorage.removeItem(KEY);location.reload()}}
-["#mes","#valorHora","#pix","#titulo"].forEach(s=>{$(s).addEventListener("input",()=>{gerar();salvar()});$(s).addEventListener("change",()=>{gerar();salvar()})});
+
+function renderAlunos(){
+  $("#listaAlunos").innerHTML=state.alunos
+    .map(a=>`<span class="student-chip">${escapeHtml(a)}</span>`)
+    .join("");
+}
+
+function adicionarAluno(){
+  const input=$("#novoAluno");
+  const nome=input.value.trim().replace(/\s+/g," ");
+
+  if(!nome)return;
+
+  if(state.alunos.some(a=>a.toLowerCase()===nome.toLowerCase())){
+    $("#status").textContent="Esse aluno já está cadastrado.";
+    return;
+  }
+
+  state.alunos.push(nome);
+  input.value="";
+
+  renderAlunos();
+  salvarEstado();
+}
+
+function alunoOptions(selected){
+  return state.alunos.map(a=>`
+    <option value="${escapeHtml(a)}" ${a===selected?"selected":""}>
+      ${escapeHtml(a)}
+    </option>
+  `).join("");
+}
+
+/* ---------- Modal helpers ---------- */
+
+function abrirModal(id){
+  $("#"+id).classList.add("open");
+  document.body.classList.add("modal-open");
+}
+
+function fecharModal(id){
+  $("#"+id).classList.remove("open");
+
+  if(!document.querySelector(".modal-backdrop.open")){
+    document.body.classList.remove("modal-open");
+  }
+
+  if(id==="modalAula")aulaEditandoId=null;
+  if(id==="modalPagamento")pagamentoEditandoId=null;
+}
+
+/* ---------- Aulas ---------- */
+
+function abrirNovaAula(){
+  aulaEditandoId=null;
+
+  $("#modalAulaTitulo").textContent="Nova aula";
+  $("#aAluno").innerHTML=alunoOptions(state.alunos[0]||"Vitor Sereno");
+  $("#aData").value="";
+  $("#aInicio").value="";
+  $("#aFim").value="";
+
+  abrirModal("modalAula");
+}
+
+function editarAula(id){
+  const a=state.aulas.find(x=>x.id===id);
+  if(!a)return;
+
+  aulaEditandoId=id;
+
+  $("#modalAulaTitulo").textContent="Editar aula";
+  $("#aAluno").innerHTML=alunoOptions(a.aluno);
+  $("#aData").value=a.data;
+  $("#aInicio").value=a.inicio;
+  $("#aFim").value=a.fim;
+
+  abrirModal("modalAula");
+}
+
+function salvarAula(){
+  const aluno=$("#aAluno").value;
+  const data=$("#aData").value;
+  const inicio=$("#aInicio").value;
+  const fim=$("#aFim").value;
+
+  if(!aluno||!data||!inicio||!fim){
+    alert("Preencha aluno, data, início e fim.");
+    return;
+  }
+
+  const registro={aluno,data,inicio,fim};
+
+  if(aulaEditandoId){
+    const i=state.aulas.findIndex(a=>a.id===aulaEditandoId);
+    if(i>=0){
+      state.aulas[i]={...state.aulas[i],...registro};
+    }
+  }else{
+    state.aulas.push({
+      id:novoId(),
+      ...registro
+    });
+  }
+
+  ordenarAulas();
+  renderAulas();
+  atualizarRelatorio();
+  salvarEstado();
+
+  fecharModal("modalAula");
+}
+
+function excluirAula(id){
+  if(!confirm("Excluir esta aula?"))return;
+
+  state.aulas=state.aulas.filter(a=>a.id!==id);
+
+  renderAulas();
+  atualizarRelatorio();
+  salvarEstado();
+}
+
+function ordenarAulas(){
+  state.aulas.sort((a,b)=>
+    (a.data+a.inicio).localeCompare(b.data+b.inicio)
+  );
+}
+
+function renderAulas(){
+  if(!state.aulas.length){
+    $("#listaAulas").innerHTML=
+      `<div class="empty">Nenhuma aula registrada.</div>`;
+    return;
+  }
+
+  $("#listaAulas").innerHTML=state.aulas.map(a=>{
+    const duracao=horasTexto(minutosEntre(a.inicio,a.fim));
+
+    return `
+      <article class="record-card">
+        <div class="record-info">
+          <div class="record-title">
+            ${dataCurta(a.data)} • ${escapeHtml(a.inicio)}–${escapeHtml(a.fim)} • ${duracao}
+          </div>
+          <div class="record-sub">
+            ${escapeHtml(a.aluno)} • ${semana(a.data)}
+          </div>
+        </div>
+
+        <div class="record-actions">
+          <button class="ghost small" type="button" onclick="editarAula('${a.id}')">
+            Editar
+          </button>
+          <button class="danger small" type="button" onclick="excluirAula('${a.id}')">
+            Excluir
+          </button>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+/* ---------- Pagamentos ---------- */
+
+function abrirNovoPagamento(){
+  pagamentoEditandoId=null;
+
+  $("#modalPagamentoTitulo").textContent="Novo pagamento";
+  $("#pData").value="";
+  $("#pHora").value="";
+  $("#pValor").value="";
+
+  abrirModal("modalPagamento");
+}
+
+function editarPagamento(id){
+  const p=state.pagamentos.find(x=>x.id===id);
+  if(!p)return;
+
+  pagamentoEditandoId=id;
+
+  $("#modalPagamentoTitulo").textContent="Editar pagamento";
+  $("#pData").value=p.data;
+  $("#pHora").value=p.hora||"";
+  $("#pValor").value=p.valor;
+
+  abrirModal("modalPagamento");
+}
+
+function salvarPagamento(){
+  const data=$("#pData").value;
+  const hora=$("#pHora").value;
+  const valor=$("#pValor").value;
+
+  if(!data||!valor||Number(valor)<=0){
+    alert("Preencha a data e informe um valor válido.");
+    return;
+  }
+
+  const registro={data,hora,valor};
+
+  if(pagamentoEditandoId){
+    const i=state.pagamentos.findIndex(p=>p.id===pagamentoEditandoId);
+    if(i>=0){
+      state.pagamentos[i]={...state.pagamentos[i],...registro};
+    }
+  }else{
+    state.pagamentos.push({
+      id:novoId(),
+      ...registro
+    });
+  }
+
+  ordenarPagamentos();
+  renderPagamentos();
+  atualizarRelatorio();
+  salvarEstado();
+
+  fecharModal("modalPagamento");
+}
+
+function excluirPagamento(id){
+  if(!confirm("Excluir este pagamento?"))return;
+
+  state.pagamentos=state.pagamentos.filter(p=>p.id!==id);
+
+  renderPagamentos();
+  atualizarRelatorio();
+  salvarEstado();
+}
+
+function ordenarPagamentos(){
+  state.pagamentos.sort((a,b)=>
+    (a.data+(a.hora||"")).localeCompare(b.data+(b.hora||""))
+  );
+}
+
+function renderPagamentos(){
+  if(!state.pagamentos.length){
+    $("#listaPagamentos").innerHTML=
+      `<div class="empty">Nenhum pagamento registrado.</div>`;
+    return;
+  }
+
+  $("#listaPagamentos").innerHTML=state.pagamentos.map(p=>`
+    <article class="record-card">
+      <div class="record-info">
+        <div class="record-title">
+          ${dataCurta(p.data)} • ${moeda(p.valor)}
+        </div>
+        <div class="record-sub">
+          ${p.hora ? escapeHtml(p.hora) : "Horário não informado"}
+        </div>
+      </div>
+
+      <div class="record-actions">
+        <button class="ghost small" type="button" onclick="editarPagamento('${p.id}')">
+          Editar
+        </button>
+        <button class="danger small" type="button" onclick="excluirPagamento('${p.id}')">
+          Excluir
+        </button>
+      </div>
+    </article>
+  `).join("");
+}
+
+/* ---------- Relatório ---------- */
+
+function atualizarRelatorio(){
+  let totalMinutos=0;
+  const linhasAulas=[];
+
+  state.aulas.forEach((a,i)=>{
+    const min=minutosEntre(a.inicio,a.fim);
+    totalMinutos+=min;
+
+    linhasAulas.push(
+`${String(i+1).padStart(2,"0")}• ${dataCurta(a.data)} _(${semana(a.data)})_
+das ${a.inicio} às ${a.fim}
+_(${horasTexto(min)})_
+_${a.aluno}_`
+    );
+  });
+
+  let totalPago=0;
+  const linhasPagamentos=[];
+
+  state.pagamentos.forEach((p,i)=>{
+    const valor=Number(p.valor||0);
+    totalPago+=valor;
+
+    const horaTxt=p.hora
+      ? ` | ${p.hora.replace(":00","h").replace(":","h")}`
+      : "";
+
+    linhasPagamentos.push(
+      `$${String(i+1).padStart(2,"0")}• ${dataCurta(p.data)}${horaTxt} | *${moeda(valor).replace(/\s/g,"")}*`
+    );
+  });
+
+  const valorHora=Number($("#valorHora").value||0);
+  const totalReceber=(totalMinutos/60)*valorHora;
+  const balanco=totalPago-totalReceber;
+
+  $("#sHoras").textContent=horasTexto(totalMinutos,true);
+  $("#sReceber").textContent=moeda(totalReceber);
+  $("#sPago").textContent=moeda(totalPago);
+  $("#sBalanco").textContent=moeda(balanco);
+
+  const mesValor=$("#mes").value;
+  const mesNome=mesValor
+    ? meses[Number(mesValor.split("-")[1])-1]
+    : "";
+
+  const titulo=$("#titulo").value.trim()||"Aulas Sala de Estudo";
+
+  let texto=`*${titulo}*`;
+
+  if(mesNome){
+    texto+=`\n_${mesNome}_`;
+  }
+
+  texto+="\n\n";
+
+  texto+=linhasAulas.length
+    ? linhasAulas.join("\n\n")
+    : "_Nenhuma aula cadastrada_";
+
+  texto+="\n\n*_____________________*\n*PAGAMENTOS*\n";
+
+  texto+=linhasPagamentos.length
+    ? linhasPagamentos.join("\n")
+    : "_Nenhum pagamento registrado_";
+
+  texto+="\n*_____________________*\n";
+  texto+="*# TOTAL*\n";
+  texto+=`* de hora-aula: *${horasTexto(totalMinutos,true)}*\n`;
+  texto+=`* a receber: *${moeda(totalReceber)}*\n`;
+  texto+=`* pago: *${moeda(totalPago)}*\n\n`;
+
+  texto+="*# BALANÇO/CRÉDITO*\n";
+  texto+=`_(pago - receber)_: *${balanco<0?"- ":""}${moeda(Math.abs(balanco))}*\n`;
+  texto+="*_____________________*\n";
+  texto+=`Valor: ${moeda(valorHora).replace(",00","")} hora-aula`;
+
+  if($("#pix").value.trim()){
+    texto+=`\n*PIX:* ${$("#pix").value.trim()}`;
+  }
+
+  $("#saida").value=texto;
+}
+
+/* ---------- Utilidades ---------- */
+
+async function copiar(){
+  atualizarRelatorio();
+
+  try{
+    await navigator.clipboard.writeText($("#saida").value);
+    $("#status").textContent="Relatório copiado.";
+    $("#status").className="note ok";
+  }catch{
+    $("#saida").select();
+    document.execCommand("copy");
+  }
+}
+
+function exportarBackup(){
+  salvarEstado();
+
+  const blob=new Blob(
+    [JSON.stringify(state,null,2)],
+    {type:"application/json"}
+  );
+
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+
+  a.href=url;
+  a.download=`sala-estudo-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function importarBackup(file){
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+    try{
+      const x=JSON.parse(reader.result);
+
+      if(!Array.isArray(x.alunos)){
+        x.alunos=["Vitor Sereno"];
+      }
+
+      x.alunos=x.alunos.filter(a=>a!=="Outro aluno");
+
+      x.config={
+        ...(x.config||{}),
+        titulo:"Aulas Sala de Estudo"
+      };
+
+      localStorage.setItem(KEY,JSON.stringify(x));
+      location.reload();
+    }catch{
+      alert("Backup inválido.");
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+function limparTudo(){
+  if(!confirm("Apagar aulas, pagamentos, alunos adicionados e configurações deste aparelho?")){
+    return;
+  }
+
+  localStorage.removeItem(KEY);
+  localStorage.removeItem(LEGACY_KEY);
+  location.reload();
+}
+
+/* ---------- Eventos ---------- */
+
+$("#btnAddAluno").onclick=adicionarAluno;
+$("#novoAluno").addEventListener("keydown",e=>{
+  if(e.key==="Enter")adicionarAluno();
+});
+
+$("#btnNovaAula").onclick=abrirNovaAula;
+$("#btnNovoPagamento").onclick=abrirNovoPagamento;
+
+$("#salvarAula").onclick=salvarAula;
+$("#salvarPagamento").onclick=salvarPagamento;
+
+document.querySelectorAll('[data-close="aula"]').forEach(el=>{
+  el.onclick=()=>fecharModal("modalAula");
+});
+
+document.querySelectorAll('[data-close="pagamento"]').forEach(el=>{
+  el.onclick=()=>fecharModal("modalPagamento");
+});
+
+$("#modalAula").addEventListener("click",e=>{
+  if(e.target===$("#modalAula"))fecharModal("modalAula");
+});
+
+$("#modalPagamento").addEventListener("click",e=>{
+  if(e.target===$("#modalPagamento"))fecharModal("modalPagamento");
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape")return;
+
+  if($("#modalAula").classList.contains("open")){
+    fecharModal("modalAula");
+  }
+
+  if($("#modalPagamento").classList.contains("open")){
+    fecharModal("modalPagamento");
+  }
+});
+
+$("#btnCopiar").onclick=copiar;
+$("#btnExportar").onclick=exportarBackup;
+$("#btnImportar").onclick=()=>$("#arquivo").click();
+$("#btnLimpar").onclick=limparTudo;
+
+$("#arquivo").addEventListener("change",e=>{
+  const file=e.target.files?.[0];
+  if(file)importarBackup(file);
+});
+
+["#mes","#valorHora","#pix","#titulo"].forEach(selector=>{
+  $(selector).addEventListener("input",()=>{
+    atualizarRelatorio();
+    salvarEstado();
+  });
+
+  $(selector).addEventListener("change",()=>{
+    atualizarRelatorio();
+    salvarEstado();
+  });
+});
+
 window.addEventListener("DOMContentLoaded",restaurar);
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").catch(console.error);
+  });
+}
 </script>
 </body>
 </html>
